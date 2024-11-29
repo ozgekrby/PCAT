@@ -4,6 +4,8 @@ const ejs=require("ejs");
 const app = express();
 app.set("view engine","ejs");
 app.use(express.static('public'));
+app.use(express.urlencoded({extended:true}));
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.render("index")
@@ -16,6 +18,10 @@ app.get('/add', (req, res) => {
 });
 app.get('/photo', (req, res) => {
   res.render("photo")
+});
+app.post('/photos', (req, res) => {
+  console.log(req.body);
+  res.redirect("/")
 });
 const port = 3000;
 
