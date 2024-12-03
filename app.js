@@ -10,7 +10,9 @@ const app = express();
 mongoose.connect('mongodb://localhost/pcat-test-db');
 app.set('view engine', 'ejs');
 app.use(fileUpload());
-app.use(methodOverride('_method'))
+app.use(methodOverride('_method',{
+  methods:["POST","GET"]
+}))
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -69,6 +71,13 @@ app.put('/photos/:id',async (req, res) => {
   photo.description = req.body.description
   photo.save()
   res.redirect(`/photos/${req.params.id}`)
+});
+app.delete('/photos/:id',async (req, res) => {
+  const photo = await Photo.findOne({ _id: req.params.id });
+  let deletedImage = __dirname + '/public' + photo.image;
+  if(fs.existsSync(deletedImage)){ fs.unlinkSync(deletedImage) }
+  await Photo.findByIdAndDelete(req.params.id);
+  res.redirect('/');
 });
 const port = 3000;
 
