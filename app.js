@@ -5,7 +5,8 @@ const mongoose = require('mongoose');
 const photoController=require("./controllers/photoControllers")
 const pageController=require("./controllers/pageController")
 const app = express();
-mongoose.connect('mongodb://localhost/pcat-test-db');
+require('dotenv').config();
+mongoose.connect(process.env.MONGO_URL);
 app.set('view engine', 'ejs');
 app.use(fileUpload());
 app.use(methodOverride('_method',{
